@@ -1,0 +1,35 @@
+{
+  "name": "PIML in Metal AM",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash",
+            "args": ["-l"]
+          }
+        },
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.formatting.provider": "black"
+      }
+    }
+  },
+  "initializeCommand": "docker-compose -f .devcontainer/docker-compose.yml build || echo 'If build fails, make sure Docker is running and properly configured'",
+  "remoteEnv": {
+    "EXTERNAL_DRIVE_PATH": "/external/l-pbf-dataset",
+    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
+  },
+  "postCreateCommand": "pip install -e . && pip install -e '.[dev]' || echo 'Package installation with dev dependencies failed, continuing anyway' && (pre-commit install || echo 'Pre-commit hook installation failed, continuing anyway')",
+  "remoteUser": "vscode"
+}

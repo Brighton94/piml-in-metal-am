@@ -1,0 +1,51 @@
+"""Configuration settings for the project."""
+import os
+from pathlib import Path
+from typing import Optional
+
+# Get the dataset root from environment variable or use a default
+DATASET_ROOT = os.getenv("DATASET_ROOT", "/data")
+
+# External drive path for datasets
+EXTERNAL_DATASET_PATH = "/external/l-pbf-dataset"
+
+# Define dataset paths with multiple possible locations
+DATASET_PATHS = {
+    "tcr_phase1_build1": [
+        Path(DATASET_ROOT) / "2021-07-13 TCR Phase 1 Build 1.hdf5",
+        Path(EXTERNAL_DATASET_PATH) / "2021-07-13 TCR Phase 1 Build 1.hdf5",
+    ],
+    "tcr_phase1_build2": [
+        Path(DATASET_ROOT) / "2021-04-16 TCR Phase 1 Build 2.hdf5",
+        Path(EXTERNAL_DATASET_PATH) / "2021-04-16 TCR Phase 1 Build 2.hdf5",
+    ],
+}
+
+def get_dataset_path(dataset_key: str) -> Path | None:
+    """Get the full path for a dataset.
+    
+    Args:
+        dataset_key: Key identifying the dataset in DATASET_PATHS
+        
+    Returns:
+        Path object if dataset exists, None otherwise
+    """
+    if dataset_key not in DATASET_PATHS:
+        raise KeyError(f"Dataset key '{dataset_key}' not found in configuration")
+    
+    # Try each possible path for this dataset
+    for path in DATASET_PATHS[dataset_key]:
+        if path.exists():
+            return path
+            
+    # If we get here, none of the paths existed
+    paths_str = "\n - ".join([str(p) for p in DATASET_PATHS[dataset_key]])
+    print(
+        f"Warning: Dataset '{dataset_key}' not found in any of the configured locations:\n"
+        f" - {paths_str}"
+    )
+    return None
+
+# Constants for segmentation
+CLASS_ID_STREAK = 3
+CLASS_ID_SPATTER = 8 
