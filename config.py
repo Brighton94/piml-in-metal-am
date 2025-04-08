@@ -2,12 +2,16 @@
 import os
 from pathlib import Path
 from typing import Optional
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Get the dataset root from environment variable or use a default
 DATASET_ROOT = os.getenv("DATASET_ROOT", "/data")
 
 # External drive path for datasets
-EXTERNAL_DATASET_PATH = "/external/l-pbf-dataset"
+EXTERNAL_DATASET_PATH = os.getenv("EXTERNAL_DRIVE_PATH", "/external/l-pbf-dataset")
 
 # Define dataset paths with multiple possible locations
 DATASET_PATHS = {
@@ -48,4 +52,4 @@ def get_dataset_path(dataset_key: str) -> Path | None:
 
 # Constants for segmentation
 CLASS_ID_STREAK = 3
-CLASS_ID_SPATTER = 8 
+CLASS_ID_SPATTER = 8

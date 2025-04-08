@@ -12,15 +12,13 @@ services:
     volumes:
       # Use delegated mode for better performance
       - ..:/workspace:delegated
-      - ../data:/data:delegated
-      - "/media/brighton/Samsung T7/l-pbf-dataset:/external/l-pbf-dataset:ro"
+      - ${DATASET_ROOT:-../data}:/data:delegated
+      - "${EXTERNAL_DRIVE_PATH:-/tmp}:/external/l-pbf-dataset:ro"
       - /tmp/.X11-unix:/tmp/.X11-unix
     environment:
       - PYTHONPATH=/workspace
       - DATASET_ROOT=/data
       - EXTERNAL_DRIVE_PATH=/external/l-pbf-dataset
       - DISPLAY=${DISPLAY}
-    # Use privileged mode if permission issues persist
-    # privileged: true
     user: vscode
     command: sleep infinity
