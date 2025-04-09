@@ -23,14 +23,23 @@ If you're using Linux and want to run GUI applications inside the container, you
 
 #### Environment Variables
 
-Create a `.env` file in the project root with these variables:
+Create a `.env` file in `.devcontainer` with these variables:
 
 ```bash
 # Path to your dataset on the host
 DATASET_ROOT=/path/to/your/data
 # Path to external storage (if applicable)
 EXTERNAL_DRIVE_PATH=/path/to/external/drive/l-pbf-dataset
+# Set the default user and group IDs
+USER_ID=1000
+USER_GID=1000
 ```
+NB:
+- On MacOS, typically USER_ID=501 and USER_GID=20
+- On Linux, typically USER_ID=1000 and USER_GID=1000
+- On Windows, typically USER_ID=1000 and USER_GID=1000 (if using WSL)
+
+You can find these by running `id -u` and `id -g` in the terminal (WSL on Windows)
 
 #### Container Configuration
 

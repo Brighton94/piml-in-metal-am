@@ -1,23 +1,27 @@
 version: "3.9"
 
 services:
-    app:
-        build:
-            context: ..
-            dockerfile: .devcontainer/Dockerfile
-            args:
-                USER_UID: ${USER_UID}
-                USER_GID: ${USER_GID}
-        volumes:
-            # Use delegated mode for better performance
-            - ..:/workspace:delegated
-            - ${DATASET_ROOT:-../data}:/data:delegated
-            - "${EXTERNAL_DRIVE_PATH:-/tmp}:/external/l-pbf-dataset:ro"
-            - /tmp/.X11-unix:/tmp/.X11-unix
-        environment:
-            - PYTHONPATH=/workspace
-            - DATASET_ROOT=/data
-            - EXTERNAL_DRIVE_PATH=/external/l-pbf-dataset
-            - DISPLAY=${DISPLAY}
-        user: vscode
-        command: sleep infinity
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        USER_UID: "${USER_UID}"
+        USER_GID: "${USER_GID}"
+    user: "vscode"
+    command: "sleep infinity"
+
+    environment:
+      PYTHONPATH: "/workspace"
+      DATASET_ROOT: "/data"
+      EXTERNAL_DRIVE_PATH: "/external/l-pbf-dataset"
+      DISPLAY: "${DISPLAY}"
+
+    volumes:
+      - "..:/workspace:delegated"
+      # If DATASET_ROOT is not set, fall back to ../data
+      - "${DATASET_ROOT:-../data}:/data:delegated"
+      # If EXTERNAL_DRIVE_PATH is not set, fall back to /tmp
+      - "${EXTERNAL_DRIVE_PATH:-/tmp}:/external/l-pbf-dataset:ro"
+      # X11 socket for GUIs (works on Linux; for macOS, see XQuartz)
+      - "/tmp/.X11-unix:/tmp/.X11-unix"
