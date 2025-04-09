@@ -16,9 +16,9 @@ from ttkbootstrap.constants import BOTH, BOTTOM, LEFT, RIGHT, YES, X
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 import numpy as np
-from config import get_dataset_path
 from matplotlib import cm, collections, colors
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from src.config import get_dataset_path
 
 ################################################################################
 # Configuration
