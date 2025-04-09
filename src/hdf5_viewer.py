@@ -1,25 +1,33 @@
-import ttkbootstrap as ttk
-from ttkbootstrap.constants import *
+"""Provide a simple HDF5 viewer for the Peregrine dataset (https://doi.ccs.ornl.gov/dataset/c0247625-951c-5616-a2e3-03803e848896).
+
+- It allows users to visualize different datasets within the HDF5 file.
+- It provides a GUI with options to select groups and layers.
+- The data is displayed using matplotlib.
+"""
+
+import contextlib
 import tkinter as tk
+
 import h5py
 import matplotlib
-matplotlib.use('TkAgg')
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import BOTH, BOTTOM, LEFT, RIGHT, YES, X
+
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
-
-import matplotlib.cm as cm
-import matplotlib.collections as collections
-import matplotlib.colors as mcolors
-
 from config import get_dataset_path
+from matplotlib import cm, collections, colors
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 ################################################################################
 # Configuration
 ################################################################################
 path_file = get_dataset_path("tcr_phase1_build1")
 if path_file is None:
-    raise FileNotFoundError("Dataset not found. Please check the configuration and data directory.")
+    raise FileNotFoundError(
+        "Dataset not found. Please check the configuration and data directory."
+    )
 
 ################################################################################
 # We'll parse out the class names for segmentation if present
@@ -28,24 +36,26 @@ class_name_dict = {}
 with h5py.File(path_file, "r") as f:
     seg_group = f.get("slices/segmentation_results", None)
     if seg_group is not None and "class_names" in seg_group.attrs:
-        raw = seg_group.attrs["class_names"]  # e.g. "Powder,Printed,Recoater Hopping,..."
+        raw = seg_group.attrs["class_names"]
         splitted = [x.strip() for x in raw.split(",")]
         for i, name in enumerate(splitted):
             class_name_dict[i] = name
 
+
 ################################################################################
 # 1) Collect only datasets from these top-level groups
 ################################################################################
-def collect_datasets_grouped():
-    groups = {
+def collect_datasets_grouped() -> dict[str, list[str]]:
+    groups: dict[str, list[str]] = {
         "slices/segmentation_results": [],
         "scans": [],
         "temporal": [],
         "reference_images": [],
-        "micrographs": []
+        "micrographs": [],
     }
     with h5py.File(path_file, "r") as f:
-        def visitor(name, obj):
+
+        def visitor(name: str, obj: h5py.HLObject) -> None:
             if isinstance(obj, h5py.Dataset):
                 parts = name.split("/")
                 top2 = "/".join(parts[:2])
@@ -54,98 +64,134 @@ def collect_datasets_grouped():
                     groups[top1].append(name)
                 elif top2 in groups:
                     groups[top2].append(name)
+
         f.visititems(visitor)
 
-    for k in groups:
-        groups[k].sort()
+    for _k, datasets in groups.items():
+        datasets.sort()
     return groups
+
 
 ################################################################################
 # 2) Display logic (NO status messages here, just plotting).
 ################################################################################
-def display_dataset(ds_name, layer_idx, fig):
-    """
-    ds_name: full path e.g. "scans/50" or "slices/segmentation_results/3"
-    layer_idx: user-chosen layer from spinbox
-    fig: matplotlib figure
-    (No label or status here; we do that in update_display)
-    """
+def display_dataset(ds_name: str, layer_idx: int, fig: plt.Figure) -> None:
+    """Display the dataset in the given figure."""
     fig.clear()
     ax = fig.add_subplot(111)
 
     with h5py.File(path_file, "r") as build:
         if ds_name not in build:
-            ax.text(0.5, 0.5, f"Missing dataset:\n{ds_name}",
-                    ha="center", va="center", transform=ax.transAxes)
-            ax.set_title("Missing dataset")
-            fig.canvas.draw()
+            _display_missing_dataset(ax, ds_name, fig)
             return
 
         dset = build[ds_name]
         parts = ds_name.split("/")
 
-        if len(parts) >= 2 and parts[0] == "slices" and parts[1] == "segmentation_results":
-            if layer_idx < dset.shape[0]:
-                arr2d = dset[layer_idx, ...]
-                try:
-                    seg_idx = int(parts[-1])
-                except:
-                    seg_idx = None
-                seg_label = class_name_dict.get(seg_idx, f"Class {parts[-1]}")
-                ax.imshow(arr2d, cmap="jet", interpolation="none")
-                ax.set_title(f"{ds_name}\nLayer={layer_idx} ({seg_label})")
-            else:
-                ax.text(0.5, 0.5,
-                        f"layer={layer_idx} out of range\nshape={dset.shape}",
-                        ha="center", va="center", transform=ax.transAxes)
-                ax.set_title(ds_name)
-
+        if (
+            len(parts) >= 2
+            and parts[0] == "slices"
+            and parts[1] == "segmentation_results"
+        ):  # noqa: E501, PLR2004
+            _display_segmentation_results(ax, dset, ds_name, layer_idx)
         elif parts[0] == "scans":
-            data = dset[...]
-            x = data[:, 0:2]
-            y = data[:, 2:4]
-            t = data[:, 4]
-            colorizer = cm.ScalarMappable(
-                norm=mcolors.Normalize(t.min(), t.max()),
-                cmap="jet"
-            )
-            line_collection = collections.LineCollection(
-                np.stack([x, y], axis=-1),
-                colors=colorizer.to_rgba(t)
-            )
-            ax.add_collection(line_collection)
-            ax.set_aspect("equal", adjustable="box")
-            ax.set_xlim(x.min(), x.max())
-            ax.set_ylim(y.min(), y.max())
-            ax.set_title(ds_name)
-
+            _display_scans(ax, dset, ds_name)
         elif parts[0] == "temporal":
-            data = dset[...]
-            ax.scatter(np.arange(len(data)), data, s=5)
-            ax.set_title(ds_name)
-            ax.set_xlabel("Layer index")
-            # Show units if present
-            units = dset.attrs.get("units", "")
-            if isinstance(units, bytes):
-                units = units.decode()
-            ax.set_ylabel(units if units else "Value")
-
+            _display_temporal(ax, dset, ds_name)
         elif parts[0] in ["reference_images", "micrographs"]:
-            arr = dset[...]
-            ax.imshow(arr, interpolation="none")
-            ax.set_title(ds_name)
-
+            _display_images(ax, dset, ds_name)
         else:
-            ax.text(0.5, 0.5, f"Unhandled: {ds_name}",
-                    ha="center", va="center", transform=ax.transAxes)
-            ax.set_title(ds_name)
+            _display_unhandled(ax, ds_name)
 
     fig.canvas.draw()
+
+
+def _display_missing_dataset(ax: plt.Axes, ds_name: str, fig: plt.Figure) -> None:
+    ax.text(
+        0.5,
+        0.5,
+        f"Missing dataset:\n{ds_name}",
+        ha="center",
+        va="center",
+        transform=ax.transAxes,
+    )
+    ax.set_title("Missing dataset")
+    fig.canvas.draw()
+
+
+def _display_segmentation_results(
+    ax: plt.Axes, dset: h5py.Dataset, ds_name: str, layer_idx: int
+) -> None:
+    if layer_idx < dset.shape[0]:
+        arr2d = dset[layer_idx, ...]
+        seg_idx: int | None = None
+        with contextlib.suppress(ValueError):
+            seg_idx = int(ds_name.split("/")[-1])
+
+        seg_label = class_name_dict.get(seg_idx or 0, f"Class {ds_name.split('/')[-1]}")
+        ax.imshow(arr2d, cmap="jet", interpolation="none")
+        ax.set_title(f"{ds_name}\nLayer={layer_idx} ({seg_label})")
+    else:
+        ax.text(
+            0.5,
+            0.5,
+            f"layer={layer_idx} out of range\nshape={dset.shape}",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
+        ax.set_title(ds_name)
+
+
+def _display_scans(ax: plt.Axes, dset: h5py.Dataset, ds_name: str) -> None:
+    data = dset[...]
+    x = data[:, 0:2]
+    y = data[:, 2:4]
+    t = data[:, 4]
+    colorizer = cm.ScalarMappable(norm=colors.Normalize(t.min(), t.max()), cmap="jet")
+    line_collection = collections.LineCollection(
+        np.stack([x, y], axis=-1), colors=colorizer.to_rgba(t)
+    )
+    ax.add_collection(line_collection)
+    ax.set_aspect("equal", adjustable="box")
+    ax.set_xlim(x.min(), x.max())
+    ax.set_ylim(y.min(), y.max())
+    ax.set_title(ds_name)
+
+
+def _display_temporal(ax: plt.Axes, dset: h5py.Dataset, ds_name: str) -> None:
+    data = dset[...]
+    ax.scatter(np.arange(len(data)), data, s=5)
+    ax.set_title(ds_name)
+    ax.set_xlabel("Layer index")
+    units: str | bytes = dset.attrs.get("units", "")
+    if isinstance(units, bytes):
+        units = units.decode()
+    ax.set_ylabel(units if units else "Value")
+
+
+def _display_images(ax: plt.Axes, dset: h5py.Dataset, ds_name: str) -> None:
+    arr = dset[...]
+    ax.imshow(arr, interpolation="none")
+    ax.set_title(ds_name)
+
+
+def _display_unhandled(ax: plt.Axes, ds_name: str) -> None:
+    ax.text(
+        0.5,
+        0.5,
+        f"Unhandled: {ds_name}",
+        ha="center",
+        va="center",
+        transform=ax.transAxes,
+    )
+    ax.set_title(ds_name)
+
 
 ################################################################################
 # 3) Main GUI
 ################################################################################
-def main():
+def main() -> None:  # noqa: C901, PLR0915
     groups = collect_datasets_grouped()
     group_names = list(groups.keys())
 
@@ -153,14 +199,14 @@ def main():
     app = style.master
     app.title("HDF5 Viewer - Changing Status Done/Loading")
 
-    current_index = [0]
-    fig = plt.Figure(figsize=(7,5))
+    current_index: list[int] = [0]
+    fig = plt.Figure(figsize=(7, 5))
     canvas = FigureCanvasTkAgg(fig, master=app)
     canvas_widget = canvas.get_tk_widget()
     canvas_widget.pack(fill=BOTH, expand=YES)
 
     # Status label
-    lbl_status = ttk.Label(app, text="", padding=5)
+    lbl_status = ttk.Label(app, text="", padding=5, anchor="center")
     lbl_status.pack(side=BOTTOM, fill=X)
 
     # Top controls
@@ -169,16 +215,23 @@ def main():
 
     ttk.Label(top_frame, text="Group: ").pack(side=LEFT, padx=5)
     current_group_var = tk.StringVar(value=group_names[0])
-    combo = ttk.Combobox(top_frame, textvariable=current_group_var,
-                         values=group_names, width=25, style="TCombobox")
+    combo = ttk.Combobox(
+        top_frame,
+        textvariable=current_group_var,
+        values=group_names,
+        width=25,
+        style="TCombobox",
+    )
     combo.pack(side=LEFT, padx=5)
 
     ttk.Label(top_frame, text="Layer:").pack(side=LEFT, padx=5)
     layer_var = tk.IntVar(value=50)
-    layer_spin = ttk.Spinbox(top_frame, from_=0, to=9999, textvariable=layer_var, width=6)
+    layer_spin = ttk.Spinbox(
+        top_frame, from_=0, to=9999, textvariable=layer_var, width=6
+    )  # noqa: E501
     layer_spin.pack(side=LEFT, padx=5)
 
-    def on_go_layer():
+    def on_go_layer() -> None:
         group = current_group_var.get()
         dsets = groups[group]
         layer_chosen = layer_var.get()
@@ -201,7 +254,7 @@ def main():
     btn_frame = ttk.Frame(app, padding=5)
     btn_frame.pack(fill=X)
 
-    def update_display():
+    def update_display() -> None:
         # FIRST: show "Loading data..." in orange
         lbl_status.config(text="Loading data...", foreground="orange")
         lbl_status.update_idletasks()
@@ -216,7 +269,7 @@ def main():
             return
 
         ds_name = dsets[current_index[0]]
-        lbl_dataset.config(text=f"{ds_name}  [{current_index[0]+1}/{len(dsets)}]")
+        lbl_dataset.config(text=f"{ds_name}  [{current_index[0] + 1}/{len(dsets)}]")
 
         # Call display
         display_dataset(ds_name, layer_var.get(), fig)
@@ -224,13 +277,13 @@ def main():
         # AFTER done drawing, set "Done." in green
         lbl_status.config(text="Done.", foreground="green")
 
-    def on_combo_changed(event=None):
+    def on_combo_changed(event: tk.Event | None = None) -> None:
         current_index[0] = 0
         update_display()
 
     combo.bind("<<ComboboxSelected>>", on_combo_changed)
 
-    def on_prev():
+    def on_prev() -> None:
         group = current_group_var.get()
         dsets = groups[group]
         if not dsets:
@@ -241,12 +294,12 @@ def main():
             current_index[0] = len(dsets) - 1  # wrap
         update_display()
 
-    def on_next():
+    def on_next() -> None:
         group = current_group_var.get()
         dsets = groups[group]
         if not dsets:
             return
-        if current_index[0] < len(dsets)-1:
+        if current_index[0] < len(dsets) - 1:
             current_index[0] += 1
         else:
             current_index[0] = 0
