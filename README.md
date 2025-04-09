@@ -53,6 +53,6 @@ The system looks for datasets in multiple locations:
 - Primary: `$DATASET_ROOT` (defaults to "/data")
 - Secondary: `$EXTERNAL_DRIVE_PATH` (defaults to "/external/l-pbf-dataset")
 
-Available dataset keys:
+Currently available dataset keys:
 - "tcr_phase1_build1"
 - "tcr_phase1_build2"
