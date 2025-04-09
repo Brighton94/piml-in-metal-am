@@ -39,7 +39,7 @@ NB:
 - On Linux, typically USER_ID=1000 and USER_GID=1000
 - On Windows, typically USER_ID=1000 and USER_GID=1000 (if using WSL)
 
-You can find these by running `id -u` and `id -g` in the terminal (WSL on Windows)
+You can find these by running `id -u` and `id -g` in the terminal (WSL terminal on Windows)
 
 #### Container Configuration
 
