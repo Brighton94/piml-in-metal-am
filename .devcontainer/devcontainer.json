@@ -12,9 +12,7 @@
 				"charliermarsh.ruff",
 				"streetsidesoftware.code-spell-checker",
 				"SonarSource.sonarlint-vscode",
-				"GitHub.copilot",
-				"mechatroner.rainbow-csv",
-				"Iterative.dvc"
+				"GitHub.copilot"
 			],
 			"settings": {
 				"editor.defaultFormatter": "charliermarsh.ruff",
@@ -37,11 +35,11 @@
 			}
 		}
 	},
-	"initializeCommand": "docker-compose -f .devcontainer/docker-compose.yml build || echo 'If build fails, make sure Docker is running and properly configured'",
+	"initializeCommand": "docker-compose -f .devcontainer/docker-compose.yml build",
 	"remoteEnv": {
 		"EXTERNAL_DRIVE_PATH": "/external/l-pbf-dataset",
 		"PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
 	},
-	"postCreateCommand": "pip install -e . && pip install -e '.[dev]' || echo 'Package installation with dev dependencies failed, continuing anyway' && (pre-commit install || echo 'Pre-commit hook installation failed, continuing anyway')",
-	"remoteUser": "vscode"
+    "postCreateCommand": "pip install -e .[dev] && pre-commit install",
+    "remoteUser": "vscode"
 }
