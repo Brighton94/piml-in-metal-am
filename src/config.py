@@ -23,13 +23,13 @@ DATASET_PATHS = {
         Path(DATASET_ROOT) / "2021-04-16 TCR Phase 1 Build 2.hdf5",
     ],
     "tcr_phase1_build3": [
-        Path(DATASET_ROOT) / "2021-05-03 TCR Phase 1 Build 3.hdf5",
+        Path(DATASET_ROOT) / "2021-07-13 TCR Phase 1 Build 3.hdf5",
     ],
     "tcr_phase1_build4": [
-        Path(DATASET_ROOT) / "2021-05-17 TCR Phase 1 Build 4.hdf5",
+        Path(DATASET_ROOT) / "2021-08-03 TCR Phase 1 Build 4.hdf5",
     ],
     "tcr_phase1_build5": [
-        Path(DATASET_ROOT) / "2021-06-01 TCR Phase 1 Build 5.hdf5",
+        Path(DATASET_ROOT) / "2021-08-23 TCR Phase 1 Build 5.hdf5",
     ],
 }
 
