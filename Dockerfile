@@ -6,12 +6,13 @@ ARG USER_GID=1000
 
 # Install dependencies and create the user
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl libgl1 systemctl tk-dev x11-apps \
+    curl libgl1 systemctl \
     && groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
+ENV DATASET_ROOT=/data
 
 # Install PyTorch system-wide (before switching to user)
 RUN pip install --upgrade pip && \
@@ -25,4 +26,4 @@ RUN pip install --upgrade pip && pip install .
 
 USER $USERNAME
 
-CMD [ "bash" ]
+CMD ["tail", "-f", "/dev/null"]

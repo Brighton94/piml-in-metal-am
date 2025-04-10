@@ -73,7 +73,7 @@ def collect_datasets_grouped() -> dict[str, list[str]]:
 
 
 ################################################################################
-# 2) Display logic (NO status messages here, just plotting).
+# 2) Display logic
 ################################################################################
 def display_dataset(ds_name: str, layer_idx: int, fig: plt.Figure) -> None:
     """Display the dataset in the given figure."""
@@ -92,7 +92,7 @@ def display_dataset(ds_name: str, layer_idx: int, fig: plt.Figure) -> None:
             len(parts) >= 2
             and parts[0] == "slices"
             and parts[1] == "segmentation_results"
-        ):  # noqa: E501, PLR2004
+        ):
             _display_segmentation_results(ax, dset, ds_name, layer_idx)
         elif parts[0] == "scans":
             _display_scans(ax, dset, ds_name)
@@ -255,7 +255,6 @@ def main() -> None:  # noqa: C901, PLR0915
     btn_frame.pack(fill=X)
 
     def update_display() -> None:
-        # FIRST: show "Loading data..." in orange
         lbl_status.config(text="Loading data...", foreground="orange")
         lbl_status.update_idletasks()
 
@@ -271,10 +270,7 @@ def main() -> None:  # noqa: C901, PLR0915
         ds_name = dsets[current_index[0]]
         lbl_dataset.config(text=f"{ds_name}  [{current_index[0] + 1}/{len(dsets)}]")
 
-        # Call display
         display_dataset(ds_name, layer_var.get(), fig)
-
-        # AFTER done drawing, set "Done." in green
         lbl_status.config(text="Done.", foreground="green")
 
     def on_combo_changed(event: tk.Event | None = None) -> None:
@@ -291,7 +287,7 @@ def main() -> None:  # noqa: C901, PLR0915
         if current_index[0] > 0:
             current_index[0] -= 1
         else:
-            current_index[0] = len(dsets) - 1  # wrap
+            current_index[0] = len(dsets) - 1
         update_display()
 
     def on_next() -> None:

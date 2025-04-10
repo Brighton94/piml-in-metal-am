@@ -1,9 +1,4 @@
-"""Configuration settings for the project.
-
-This module handles the dataset paths and constants used throughout the project.
-It loads environment variables for dataset locations and provides a function to
-retrieve the dataset path.
-"""
+"""Configuration file for the l-pbf-dataset."""
 
 import os
 from pathlib import Path
@@ -17,18 +12,24 @@ load_dotenv()
 CLASS_ID_STREAK = 3
 CLASS_ID_SPATTER = 8
 
-DATASET_ROOT = os.getenv("DATASET_ROOT", "/data")
-EXTERNAL_DATASET_PATH = os.getenv("EXTERNAL_DRIVE_PATH", "/external/l-pbf-dataset")
+DATASET_ROOT = os.getenv("HOST_DATASET_PATH", "/data")
 
-# Define dataset paths with multiple possible locations
+# Define dataset paths with single location
 DATASET_PATHS = {
     "tcr_phase1_build1": [
         Path(DATASET_ROOT) / "2021-07-13 TCR Phase 1 Build 1.hdf5",
-        Path(EXTERNAL_DATASET_PATH) / "2021-07-13 TCR Phase 1 Build 1.hdf5",
     ],
     "tcr_phase1_build2": [
         Path(DATASET_ROOT) / "2021-04-16 TCR Phase 1 Build 2.hdf5",
-        Path(EXTERNAL_DATASET_PATH) / "2021-04-16 TCR Phase 1 Build 2.hdf5",
+    ],
+    "tcr_phase1_build3": [
+        Path(DATASET_ROOT) / "2021-05-03 TCR Phase 1 Build 3.hdf5",
+    ],
+    "tcr_phase1_build4": [
+        Path(DATASET_ROOT) / "2021-05-17 TCR Phase 1 Build 4.hdf5",
+    ],
+    "tcr_phase1_build5": [
+        Path(DATASET_ROOT) / "2021-06-01 TCR Phase 1 Build 5.hdf5",
     ],
 }
 

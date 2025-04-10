@@ -23,7 +23,6 @@ dependencies = [
     "opencv-python>=4.5.0",
     "jupyter>=1.0.0",
     "ipykernel>=6.29.0",
-    "black>=24.1.0",
     "pylint>=3.0.0",
     "mypy>=1.8.0",
     "pytest>=8.0.0",
@@ -32,7 +31,6 @@ dependencies = [
     "ttkbootstrap>=1.12.0",
     "mlflow>=2.21.2",
     "dvc[all]>=3.59.0",
-    "tk>=0.1.0"
 ]
 
 [project.optional-dependencies]
@@ -45,7 +43,6 @@ dev = [
     "pytest-retry",
     "pytest-xdist",
     "ruff",
-    "graphviz"
 ]
 test = ["pytest", "pytest-asyncio", "pytest-cov"]
 
