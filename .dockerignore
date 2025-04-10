@@ -1,0 +1,10 @@
+dependencies/install/
+logs/
+build_files/
+notebooks/
+
+.git
+.gitignore
+.pytest_cache/
+.ruff_cache/
+.vscode/

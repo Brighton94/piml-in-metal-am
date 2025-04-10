@@ -4,37 +4,37 @@
 	"service": "app",
 	"workspaceFolder": "/piml-in-metal-am",
 	"customizations": {
-	  "vscode": {
-		"extensions": [
-		  "ms-python.python",
-		  "ms-toolsai.jupyter",
-		  "ms-azuretools.vscode-docker",
-		  "charliermarsh.ruff",
-		  "streetsidesoftware.code-spell-checker",
-		  "SonarSource.sonarlint-vscode",
-		  "GitHub.copilot"
-		],
-		"settings": {
-		  "editor.defaultFormatter": "charliermarsh.ruff",
-		  "editor.formatOnSave": true,
-		  "editor.codeActionsOnSave": {
-			"source.organizeImports": true,
-			"source.fixAll": true
-		  },
-		  "terminal.integrated.defaultProfile.linux": "bash",
-		  "terminal.integrated.profiles.linux": {
-			"bash": {
-			  "path": "/bin/bash",
-			  "args": ["-l"]
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-toolsai.jupyter",
+				"ms-azuretools.vscode-docker",
+				"charliermarsh.ruff",
+				"streetsidesoftware.code-spell-checker",
+				"SonarSource.sonarlint-vscode",
+				"GitHub.copilot"
+			],
+			"settings": {
+				"editor.defaultFormatter": "charliermarsh.ruff",
+				"editor.formatOnSave": true,
+				"editor.codeActionsOnSave": {
+					"source.organizeImports": true,
+					"source.fixAll": true
+				},
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"terminal.integrated.profiles.linux": {
+					"bash": {
+						"path": "/bin/bash",
+						"args": ["-l"]
+					}
+				},
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.linting.enabled": true,
+				"python.linting.pylintEnabled": true,
+				"python.formatting.provider": "black"
 			}
-		  },
-		  "python.defaultInterpreterPath": "/usr/local/bin/python",
-		  "python.linting.enabled": true,
-		  "python.linting.pylintEnabled": true,
-		  "python.formatting.provider": "black"
 		}
-	  }
 	},
 	"postCreateCommand": "pip install -e .[dev] && pre-commit install",
 	"remoteUser": "vscode"
-  }
+}
