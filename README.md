@@ -2,6 +2,8 @@
 
 This project uses physics-informed machine learning models and Vision Transformers for segmentation of additive manufacturing data. 
 
+**Since the project is ongoing, this repo currently serves as an MLOps for Research template.**
+
 ## Setup Instructions
 
 ### Environment Variables
