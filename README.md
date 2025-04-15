@@ -1,6 +1,6 @@
 # Physics-Informed Machine Learning for Metal AM
 
-**Since the project is ongoing, this repo currently serves as an MLOps for Research template.** The aim of this project is to eventually use physics-informed machine learning models and Vision Transformers for segmentation of additive manufacturing data.
+**Since the project is a WIP, this repo currently serves as an MLOps for Research template.** The aim of this project is to eventually use physics-informed machine learning models and Vision Transformers for segmentation.
 
 ## Setup Instructions
 
