@@ -1,4 +1,4 @@
-# Physics-Informed Machine Learning for Metal AM: A MLOps Template for Researchers
+# Physics-Informed Machine Learning for Metal AM
 
 ON GOING project: This project uses physics-informed machine learning models and Vision Transformers for segmentation of additive manufacturing data. 
 
