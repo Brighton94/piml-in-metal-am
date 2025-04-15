@@ -51,14 +51,4 @@ Modify these files according to your system:
    - Adjust USER_UID and USER_GID in the build args if your host UID/GID differs from 1000
 
 2. In devcontainer.json:
-   - Modify the "remoteEnv" EXTERNAL_DRIVE_PATH if needed
-
-#### Dataset Paths
-
-The system looks for datasets in multiple locations:
-- Primary: `$DATASET_ROOT` (defaults to "/data")
-- Secondary: `$EXTERNAL_DRIVE_PATH` (defaults to "/external/l-pbf-dataset")
-
-Currently available dataset keys:
-- "tcr_phase1_build1"
-- "tcr_phase1_build2"
+   - Modify the "remoteEnv" HOST_DATASET_PATH if needed
