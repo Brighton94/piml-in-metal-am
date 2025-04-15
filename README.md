@@ -35,7 +35,3 @@ NB:
 - On Windows, typically UID=1000 and GID=1000 (if using WSL)
 
 You can find these by running `id -u` and `id -g` in the terminal (WSL terminal on Windows). 
-
-### Project Status
-
-Ongoing project: this repo currently serves as a template for machine learning operations for research projects. 
