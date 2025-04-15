@@ -26,13 +26,8 @@ If you're using Linux and want to run GUI applications inside the container, you
 Create a `.env` file in `.devcontainer` with these variables:
 
 ```bash
-# Path to your dataset on the host
-DATASET_ROOT=/path/to/your/data
-# Path to external storage (if applicable)
-EXTERNAL_DRIVE_PATH=/path/to/external/drive/l-pbf-dataset
-# Set the default user and group IDs
-USER_ID=1000
-USER_GID=1000
+# Get the dataset root from environment variable or use a default
+HOST_DATASET_PATH==/path/to/your/dataset
 ```
 NB:
 - On MacOS, typically USER_ID=501 and USER_GID=20
