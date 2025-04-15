@@ -38,4 +38,4 @@ You can find these by running `id -u` and `id -g` in the terminal (WSL terminal 
 
 ### Project Status
 
-Since this project is ongoing, this repo currently serves as a machine learning operations for research projects template. 
+Ongoing project: this repo currently serves as a template for machine learning operations for research projects. 
