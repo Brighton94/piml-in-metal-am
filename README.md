@@ -37,18 +37,3 @@ NB:
 - On Windows, typically USER_ID=1000 and USER_GID=1000 (if using WSL)
 
 You can find these by running `id -u` and `id -g` in the terminal (WSL terminal on Windows)
-
-#### Container Configuration
-
-Modify these files according to your system:
-
-1. In docker-compose.yml:
-   - Change the volume mount path to match your external drive location:
-     ```yaml
-     # Change this line to your external drive location
-     - "/path/to/your/external/drive/l-pbf-dataset:/external/l-pbf-dataset:ro"
-     ```
-   - Adjust USER_UID and USER_GID in the build args if your host UID/GID differs from 1000
-
-2. In devcontainer.json:
-   - Modify the "remoteEnv" HOST_DATASET_PATH if needed
