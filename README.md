@@ -1,4 +1,4 @@
-# Physics-Informed Machine Learning for Metal AM
+# Physics-Informed Machine Learning for Metal AM: A MLOps Template for Researchers
 
 ON GOING project: This project uses physics-informed machine learning models and Vision Transformers for segmentation of additive manufacturing data. 
 
@@ -32,8 +32,8 @@ Create a `.env` file in `.devcontainer` with these variables:
 HOST_DATASET_PATH==/path/to/your/dataset
 ```
 NB:
-- On MacOS, typically USER_ID=501 and USER_GID=20
-- On Linux, typically USER_ID=1000 and USER_GID=1000
-- On Windows, typically USER_ID=1000 and USER_GID=1000 (if using WSL)
+- On MacOS, typically UID=501 and GID=20
+- On Linux, typically UID=1000 and GID=1000
+- On Windows, typically UID=1000 and GID=1000 (if using WSL)
 
-You can find these by running `id -u` and `id -g` in the terminal (WSL terminal on Windows)
+You can find these by running `id -u` and `id -g` in the terminal (WSL terminal on Windows). 
