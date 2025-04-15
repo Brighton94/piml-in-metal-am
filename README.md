@@ -27,7 +27,7 @@ Create a `.env` file in `.devcontainer` with these variables:
 
 ```bash
 # Get the dataset root from environment variable or use a default
-HOST_DATASET_PATH==/path/to/your/dataset
+HOST_DATASET_PATH=/path/to/your/dataset
 ```
 NB:
 - On MacOS, typically UID=501 and GID=20
