@@ -4,24 +4,7 @@ This project uses physics-informed machine learning models and Vision Transforme
 
 ## Setup Instructions
 
-### Linux Display Configuration
-
-If you're using Linux and want to run GUI applications inside the container, you need to:
-
-1. Run this command on your host machine before starting the container:
-   ```bash
-   xhost +local:
-	```
-
-2. Verify your DISPLAY environment variable:
-   ```bash
-   echo $DISPLAY
-   ```
-   This value should match what's passed to the container in docker-compose.yml.
-
-### Configuration
-
-#### Environment Variables
+### Environment Variables
 
 Create a `.env` file in `.devcontainer` with these variables:
 
