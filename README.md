@@ -2,8 +2,6 @@
 
 This project uses physics-informed machine learning models and Vision Transformers for segmentation of additive manufacturing data. 
 
-This repo currently serves as a machine learning operations for research projects template. 
-
 ## Setup Instructions
 
 ### Linux Display Configuration
@@ -37,3 +35,7 @@ NB:
 - On Windows, typically UID=1000 and GID=1000 (if using WSL)
 
 You can find these by running `id -u` and `id -g` in the terminal (WSL terminal on Windows). 
+
+### Project Status
+
+Since this project is ongoing, this repo currently serves as a machine learning operations for research projects template. 
