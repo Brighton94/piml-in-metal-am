@@ -4,11 +4,7 @@ services:
       context: ..
       dockerfile: Dockerfile
     volumes:
-      - type: bind
-        source: "${HOST_DATASET_PATH}"
-        target: /data
-        bind:
-          propagation: rshared
+      - ${HOST_DATASET_PATH:-/dev/null}:/data:ro
       - ..:/piml-in-metal-am
     environment:
-      - HOST_DATASET_PATH=/data
+      - DATASET_ROOT=${HOST_DATASET_PATH:+/data}
