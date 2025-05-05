@@ -36,7 +36,3 @@ Modify `.devcontainer/devcontainer.json` according to your system:
 The application expects the dataset files to be available within the container at the `target` path specified in the `mounts` section of `.devcontainer/devcontainer.json` (e.g., `/mnt/ssd`).
 
 The `src/config.py` script will look for specific dataset files (like `tcr_phase1_build1.hdf5`) within this mounted directory. Ensure your host directory (the `source` in the mount configuration) contains the necessary HDF5 files.
-
-Currently available dataset keys used by the application:
-- "tcr_phase1_build1"
-- "tcr_phase1_build2"
