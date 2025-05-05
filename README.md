@@ -24,13 +24,13 @@ If you're using Linux and want to run GUI applications inside the container, you
 
 Modify `.devcontainer/devcontainer.json` according to your system:
 
-**Mounts**: Update the `mounts` array to point to your dataset location on the host machine. The `target` path is where the data will be accessible inside the container. For example:
-    ```jsonc
+1.  **Mounts**: Update the `mounts` array to point to your dataset location on the host machine. The `target` path is where the data will be accessible inside the container. For example:
+    ```json
     "mounts": [
-      // Update 'source' to your host path, e.g., "/Volumes/Samsung T7" or "/mnt/my_data"
       "source=/path/to/your/data,target=/mnt/ssd,type=bind,consistency=cached"
     ],
     ```
+
 #### Dataset Paths
 
 The application expects the dataset files to be available within the container at the `target` path specified in the `mounts` section of `.devcontainer/devcontainer.json` (e.g., `/mnt/ssd`).
