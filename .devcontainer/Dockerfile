@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
-ENV DATASET_ROOT=/data
 
 # Install PyTorch system-wide (before switching to user)
 RUN pip install --upgrade pip && \

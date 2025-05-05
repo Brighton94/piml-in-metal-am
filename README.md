@@ -6,12 +6,37 @@
 
 ### Environment Variables
 
-All that is needed is to create a `.env` file in `.devcontainer` with these variables:
+If you're using Linux and want to run GUI applications inside the container, you need to:
 
-```bash
-# Get the dataset root from environment variable or use a default
-HOST_DATASET_PATH=/path/to/your/dataset
-```
+1. Run this command on your host machine before starting the container:
+   ```bash
+   xhost +local:
+	```
 
-## Status
-This is a work-in-progress. Current focus: segmentation using ViT and integrating physics-based features.
+2. Verify your DISPLAY environment variable:
+   ```bash
+   echo $DISPLAY
+   ```
+
+### Configuration
+
+#### Container Configuration
+
+Modify `.devcontainer/devcontainer.json` according to your system:
+
+**Mounts**: Update the `mounts` array to point to your dataset location on the host machine. The `target` path is where the data will be accessible inside the container. For example:
+    ```jsonc
+    "mounts": [
+      // Update 'source' to your host path, e.g., "/Volumes/Samsung T7" or "/mnt/my_data"
+      "source=/path/to/your/data,target=/mnt/ssd,type=bind,consistency=cached"
+    ],
+    ```
+#### Dataset Paths
+
+The application expects the dataset files to be available within the container at the `target` path specified in the `mounts` section of `.devcontainer/devcontainer.json` (e.g., `/mnt/ssd`).
+
+The `src/config.py` script will look for specific dataset files (like `tcr_phase1_build1.hdf5`) within this mounted directory. Ensure your host directory (the `source` in the mount configuration) contains the necessary HDF5 files.
+
+Currently available dataset keys used by the application:
+- "tcr_phase1_build1"
+- "tcr_phase1_build2"
