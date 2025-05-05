@@ -1,10 +1,10 @@
 # Physics-Informed Machine Learning for Metal AM
 
-This project uses physics-informed machine learning models and Vision Transformers for segmentation of additive manufacturing data.
+**Since the project is a work-in-progress (WIP), this repo currently serves as a template for 'MLOps for Research.'** The aim of this project is to eventually use physics-informed machine learning models and Vision Transformers for segmentation.
 
 ## Setup Instructions
 
-### Linux Display Configuration
+### Environment Variables
 
 If you're using Linux and want to run GUI applications inside the container, you need to:
 
