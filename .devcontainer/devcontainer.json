@@ -1,7 +1,13 @@
 {
 	"name": "PIML in Metal AM",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
+	"build": {
+		"dockerfile": "./Dockerfile",
+		"context": ".."
+	},
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/piml-in-metal-am,type=bind,consistency=cached",
+		"source=/Volumes/Samsung T7,target=/mnt/ssd,type=bind,consistency=cached"
+	],
 	"workspaceFolder": "/piml-in-metal-am",
 	"customizations": {
 		"vscode": {

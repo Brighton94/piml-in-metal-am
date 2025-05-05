@@ -17,51 +17,26 @@ If you're using Linux and want to run GUI applications inside the container, you
    ```bash
    echo $DISPLAY
    ```
-   This value should match what's passed to the container in docker-compose.yml.
 
 ### Configuration
 
-#### Environment Variables
-
-Create a `.env` file in `.devcontainer` with these variables:
-
-```bash
-# Path to your dataset on the host
-DATASET_ROOT=/path/to/your/data
-# Path to external storage (if applicable)
-EXTERNAL_DRIVE_PATH=/path/to/external/drive/l-pbf-dataset
-# Set the default user and group IDs
-USER_ID=1000
-USER_GID=1000
-```
-NB:
-- On MacOS, typically USER_ID=501 and USER_GID=20
-- On Linux, typically USER_ID=1000 and USER_GID=1000
-- On Windows, typically USER_ID=1000 and USER_GID=1000 (if using WSL)
-
-You can find these by running `id -u` and `id -g` in the terminal (WSL terminal on Windows)
-
 #### Container Configuration
 
-Modify these files according to your system:
+Modify `.devcontainer/devcontainer.json` according to your system:
 
-1. In docker-compose.yml:
-   - Change the volume mount path to match your external drive location:
-     ```yaml
-     # Change this line to your external drive location
-     - "/path/to/your/external/drive/l-pbf-dataset:/external/l-pbf-dataset:ro"
-     ```
-   - Adjust USER_UID and USER_GID in the build args if your host UID/GID differs from 1000
-
-2. In devcontainer.json:
-   - Modify the "remoteEnv" EXTERNAL_DRIVE_PATH if needed
-
+**Mounts**: Update the `mounts` array to point to your dataset location on the host machine. The `target` path is where the data will be accessible inside the container. For example:
+    ```jsonc
+    "mounts": [
+      // Update 'source' to your host path, e.g., "/Volumes/Samsung T7" or "/mnt/my_data"
+      "source=/path/to/your/data,target=/mnt/ssd,type=bind,consistency=cached"
+    ],
+    ```
 #### Dataset Paths
 
-The system looks for datasets in multiple locations:
-- Primary: `$DATASET_ROOT` (defaults to "/data")
-- Secondary: `$EXTERNAL_DRIVE_PATH` (defaults to "/external/l-pbf-dataset")
+The application expects the dataset files to be available within the container at the `target` path specified in the `mounts` section of `.devcontainer/devcontainer.json` (e.g., `/mnt/ssd`).
 
-Currently available dataset keys:
+The `src/config.py` script will look for specific dataset files (like `tcr_phase1_build1.hdf5`) within this mounted directory. Ensure your host directory (the `source` in the mount configuration) contains the necessary HDF5 files.
+
+Currently available dataset keys used by the application:
 - "tcr_phase1_build1"
 - "tcr_phase1_build2"
