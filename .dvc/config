@@ -1,0 +1,4 @@
+[core]
+    remote = ssd
+['remote "ssd"']
+    url = /media/brighton/Samsung_T7/l-pbf-dataset
