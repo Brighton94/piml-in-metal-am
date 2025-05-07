@@ -74,3 +74,6 @@ dmypy.json
 # OS specific
 .DS_Store
 Thumbs.db
+
+# Ignore all contents of the /data folder
+data/*
