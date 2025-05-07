@@ -75,5 +75,14 @@ dmypy.json
 .DS_Store
 Thumbs.db
 
-# Ignore all contents of the /data folder
+# Ignore everything under data
 data/*
+
+# But do *not* ignore the precomputed folder itself
+!data/precomputed/
+
+# Now re-ignore all files *inside* precomputed…
+data/precomputed/*
+
+# …except the DVC metafiles, which we *do* want in Git
+!data/precomputed/*.dvc
