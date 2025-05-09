@@ -1,0 +1,6 @@
+names:
+- spatter
+- streak
+nc: 2
+train: /piml-in-metal-am/data/images/train
+val: /piml-in-metal-am/data/images/train
