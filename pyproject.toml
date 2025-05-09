@@ -33,6 +33,7 @@ dependencies = [
     "dvc[all]>=3.59.0",
     "duckdb>=1.2.2",
     "dask[array]>=2025.4.1",
+    "ultralytics>=8.0.0",
 ]
 
 [project.optional-dependencies]

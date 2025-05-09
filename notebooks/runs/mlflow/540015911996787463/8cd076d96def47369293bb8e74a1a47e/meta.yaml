@@ -1,0 +1,15 @@
+artifact_uri: /piml-in-metal-am/notebooks/runs/mlflow/540015911996787463/8cd076d96def47369293bb8e74a1a47e/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '540015911996787463'
+lifecycle_stage: active
+run_id: 8cd076d96def47369293bb8e74a1a47e
+run_name: yolo_spatter_streak3
+run_uuid: 8cd076d96def47369293bb8e74a1a47e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746814370039
+status: 1
+tags: []
+user_id: vscode
