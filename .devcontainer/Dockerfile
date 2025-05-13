@@ -15,7 +15,7 @@ ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
 
 # Install PyTorch system-wide (before switching to user)
 RUN pip install --upgrade pip && \
-    pip install torch torchvision
+    pip install torch torchvision ultralytics
 
 WORKDIR /piml-in-metal-am
 COPY src src

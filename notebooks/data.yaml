@@ -1,6 +1,7 @@
+path: /piml-in-metal-am/data/tcr_phase1_build2
+train: images/train
+val: images/val
+nc: 2
 names:
 - spatter
 - streak
-nc: 2
-train: /piml-in-metal-am/data/tcr_phase1_build2/images/train
-val: /piml-in-metal-am/data/tcr_phase1_build2/images/train
