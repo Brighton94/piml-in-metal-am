@@ -13,16 +13,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
 
-# Install PyTorch system-wide (before switching to user)
-RUN pip install --upgrade pip && \
-    pip install torch torchvision ultralytics
+
+USER $USERNAME
 
 WORKDIR /piml-in-metal-am
+
+# Install PyTorch (with CUDA 12.8 support, depending on architecture) and ultralytics
+RUN pip install --upgrade pip && \
+    if [ "$TARGETARCH" = "amd64" ] ; then \
+      pip install \
+        --index-url https://download.pytorch.org/whl/cu128 \
+        torch torchvision ultralytics ; \
+    else \
+      pip install torch torchvision ultralytics ; \
+    fi
+
 COPY src src
 COPY pyproject.toml pyproject.toml
 COPY README.md README.md
 RUN pip install --upgrade pip && pip install .
-
-USER $USERNAME
 
 CMD ["tail", "-f", "/dev/null"]
