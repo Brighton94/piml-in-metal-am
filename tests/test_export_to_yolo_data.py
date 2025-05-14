@@ -8,7 +8,8 @@ import h5py
 import numpy as np
 import pytest
 import src.config as config_mod
-from src.utils.export_to_yolo_data import (
+
+from datasets.export_to_yolo_data import (
     CAMERA_PATH,
     export,
     export_layers,
