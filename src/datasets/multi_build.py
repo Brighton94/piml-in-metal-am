@@ -1,7 +1,6 @@
+import src.config as config
+from src.datasets.peregrine import PeregrineDataset
 from torch.utils.data import ConcatDataset
-
-import config
-from datasets.peregrine import PeregrineDataset
 
 
 def build_dataset_from_keys(keys, size=512, augment=True):
