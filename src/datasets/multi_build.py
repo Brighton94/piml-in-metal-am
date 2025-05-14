@@ -3,7 +3,7 @@ from src.datasets.peregrine import PeregrineDataset
 from torch.utils.data import ConcatDataset
 
 
-def build_dataset_from_keys(keys, size=512, augment=True):
+def build_dataset_from_keys(keys, size=512, augment=True, layers=None):
     """Keys : list[str]  e.g. ["tcr_phase1_build1", "tcr_phase1_build3"]."""
 
     parts = []
@@ -11,7 +11,7 @@ def build_dataset_from_keys(keys, size=512, augment=True):
         p = config.get_dataset_path(k)
         if p is None:
             continue  # warn already printed in config
-        parts.append(PeregrineDataset(p, size=size, augment=augment))
+        parts.append(PeregrineDataset(p, size=size, augment=augment, layers=layers))
 
     if not parts:
         raise RuntimeError("No valid datasets resolved from keys:", keys)

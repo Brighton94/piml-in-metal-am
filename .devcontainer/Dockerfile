@@ -13,9 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
 
-
-USER $USERNAME
-
 WORKDIR /piml-in-metal-am
 
 # Install PyTorch (with CUDA 12.8 support, depending on architecture) and ultralytics
@@ -32,5 +29,7 @@ COPY src src
 COPY pyproject.toml pyproject.toml
 COPY README.md README.md
 RUN pip install --upgrade pip && pip install .
+
+USER $USERNAME
 
 CMD ["tail", "-f", "/dev/null"]
