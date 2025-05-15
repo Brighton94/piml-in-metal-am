@@ -1,29 +1,26 @@
-FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
+FROM python:3.13-bookworm
 
-ARG USERNAME=developer
+ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=1000
 
-# Install dependencies and create the user
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    git \
-    libgl1 \
-    python3-tk \
-    systemctl \
-    x11-apps \
-    x11-utils \
-    xauth \
-    && groupadd --gid "$USER_GID" "$USERNAME" \
-    && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY pyproject.toml README.md ./
-RUN pip install --upgrade pip && pip install -e ".[dev]"
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl libgl1 systemctl \
+ && rm -rf /var/lib/apt/lists/* \
+ && groupadd --gid $USER_GID $USERNAME \
+ && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
 
 USER $USERNAME
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
-WORKDIR /piml-in-metal-am
 
-COPY src src
+RUN pip install --upgrade pip --user \
+ && pip install --user torch torchvision ultralytics
+
+WORKDIR /home/${USERNAME}/piml-in-metal-am
+COPY --chown=${USERNAME}:${USERNAME} pyproject.toml README.md ./
+COPY --chown=${USERNAME}:${USERNAME} src/ ./src/
+
+RUN pip install --upgrade pip --user \
+ && pip install --user -e ".[dev]"
+
 CMD ["tail", "-f", "/dev/null"]
