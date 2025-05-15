@@ -1,4 +1,4 @@
-FROM python:3.12-bookworm
+FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
@@ -12,24 +12,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
-
+USER $USERNAME
 WORKDIR /piml-in-metal-am
 
-# Install PyTorch (with CUDA 12.8 support, depending on architecture) and ultralytics
-RUN pip install --upgrade pip && \
-    if [ "$TARGETARCH" = "amd64" ] ; then \
-      pip install \
-        --index-url https://download.pytorch.org/whl/cu128 \
-        torch torchvision ultralytics ; \
-    else \
-      pip install torch torchvision ultralytics ; \
-    fi
-
+COPY pyproject.toml README.md ./
+RUN pip install --user --upgrade pip && pip install --user -e ".[dev]"
 COPY src src
-COPY pyproject.toml pyproject.toml
-COPY README.md README.md
-RUN pip install --upgrade pip && pip install .
-
-USER $USERNAME
 
 CMD ["tail", "-f", "/dev/null"]
