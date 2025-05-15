@@ -18,9 +18,10 @@ def load_model():
         ignore_mismatched_sizes=True,
     )
 
-    in_ch = model.decode_head.classifier.in_channels  # 256 for B0
-    model.decode_head.classifier = nn.Conv2d(in_ch, 1, 1)
-    model.config.num_labels = 1
-    model.config.label2id = {"anomaly": 0}
+    in_ch = model.decode_head.classifier.in_channels
+    model.decode_head.classifier = nn.Conv2d(in_ch, 3, kernel_size=1)
+    model.config.num_labels = 3
+    model.config.id2label = {0: "background", 1: "streak", 2: "spatter"}
+    model.config.label2id = {"background": 0, "streak": 1, "spatter": 2}
 
     return processor, model
