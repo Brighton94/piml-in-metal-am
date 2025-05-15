@@ -46,6 +46,7 @@ coverage.xml
 
 # Jupyter Notebook
 .ipynb_checkpoints
+notebooks/*.pt # Ignore YOLO weights in notebooks
 
 # Environments
 venv/
@@ -74,6 +75,9 @@ dmypy.json
 # OS specific
 .DS_Store
 Thumbs.db
+
+# YOLO / Model Weights
+*.pt
 
 # Ignore everything under data
 data/*
