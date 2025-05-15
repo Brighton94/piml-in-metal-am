@@ -1,28 +1,26 @@
-FROM python:3.12-bookworm
+FROM python:3.13-bookworm
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=1000
 
-# Install dependencies and create the user
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl libgl1 systemctl \
-    && groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && rm -rf /var/lib/apt/lists/*
-
-ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
-
-# Install PyTorch system-wide (before switching to user)
-RUN pip install --upgrade pip && \
-    pip install torch torchvision ultralytics
-
-WORKDIR /piml-in-metal-am
-COPY src src
-COPY pyproject.toml pyproject.toml
-COPY README.md README.md
-RUN pip install --upgrade pip && pip install .
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl libgl1 systemctl \
+ && rm -rf /var/lib/apt/lists/* \
+ && groupadd --gid $USER_GID $USERNAME \
+ && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
 
 USER $USERNAME
+ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
+
+RUN pip install --upgrade pip --user \
+ && pip install --user torch torchvision ultralytics
+
+WORKDIR /home/${USERNAME}/piml-in-metal-am
+COPY --chown=${USERNAME}:${USERNAME} pyproject.toml README.md ./
+COPY --chown=${USERNAME}:${USERNAME} src/ ./src/
+
+RUN pip install --upgrade pip --user \
+ && pip install --user -e ".[dev]"
 
 CMD ["tail", "-f", "/dev/null"]
