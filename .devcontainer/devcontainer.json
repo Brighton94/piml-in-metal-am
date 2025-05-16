@@ -6,7 +6,9 @@
 	},
 	"mounts": [
 		"source=${localWorkspaceFolder},target=/piml-in-metal-am,type=bind,consistency=cached",
-		"source=/media/brighton/Samsung T7/l-pbf-dataset,target=/mnt/ssd/l-pbf-dataset,type=bind,consistency=cached"
+		"source=/media/brighton/Samsung T7/l-pbf-dataset,target=/mnt/ssd/l-pbf-dataset,type=bind,consistency=cached",
+		"source=/Volumes/Samsung T7/l-pbf-dataset,target=/mnt/ssd/l-pbf-dataset,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/data,l-pbf-dataset,target=/mnt/ssd/l-pbf-dataset,type=bind,consistency=cached"
 	],
 	"runArgs": [
 		"--gpus",
@@ -26,8 +28,8 @@
 				"ms-azuretools.vscode-docker",
 				"charliermarsh.ruff",
 				"streetsidesoftware.code-spell-checker",
-				"SonarSource.sonarlint-vscode",
-				"GitHub.copilot"
+				"GitHub.copilot",
+				"SonarSource.sonarlint-vscode"
 			],
 			"settings": {
 				"editor.defaultFormatter": "charliermarsh.ruff",
