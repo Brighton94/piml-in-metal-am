@@ -8,16 +8,10 @@
 		"source=${localWorkspaceFolder},target=/piml-in-metal-am,type=bind,consistency=cached",
 		"source=/media/brighton/Samsung T7/l-pbf-dataset,target=/mnt/ssd/l-pbf-dataset,type=bind,consistency=cached",
 		"source=/Volumes/Samsung T7/l-pbf-dataset,target=/mnt/ssd/l-pbf-dataset,type=bind,consistency=cached",
-		"source=${localWorkspaceFolder}/data,l-pbf-dataset,target=/mnt/ssd/l-pbf-dataset,type=bind,consistency=cached"
+		"source=${localWorkspaceFolder}/data,target=/mnt/ssd/l-pbf-dataset,type=bind,consistency=cached"
 	],
 	"runArgs": [
-		"--gpus",
-		"all",
-		"--shm-size=8g",
-		"--env",
-		"DISPLAY=${env:DISPLAY}",
-		"--volume",
-		"/tmp/.X11-unix:/tmp/.X11-unix:ro"
+		"--shm-size=8g"
 	],
 	"workspaceFolder": "/piml-in-metal-am",
 	"customizations": {
